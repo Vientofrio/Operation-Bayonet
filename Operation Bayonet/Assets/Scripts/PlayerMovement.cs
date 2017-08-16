@@ -5,31 +5,27 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
     public float speed = 6f;              // Player speed
-
-    Vector3 movement;
-    Rigidbody playerRigidbody;
+    public float turningSpeed = 60;
+    public float jumpSpeed = 10f;
+    
 
 	// Use this for initialization
 	void Start () {
 
-        playerRigidbody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
+	void Update () {
+        float horizontal = Input.GetAxis("Horizontal") * turningSpeed * Time.deltaTime;
+        transform.Rotate(0, horizontal, 0);
+        float vertical = Input.GetAxisRaw("Vertical") * speed * Time.deltaTime;
+        transform.Translate(0, 0, vertical);
 
-        Move(x, z);
+        if (Input.GetKeyDown ("space"))
+        {
+            transform.Translate(Vector3.up * jumpSpeed * Time.deltaTime);
+        }
         
 	}
 
-    void Move(float x, float z)
-    {
-        movement.Set(x, 0f, z);
-
-        movement = movement.normalized * speed * Time.deltaTime;
-
-        playerRigidbody.MovePosition(transform.position + movement);
-    }
 }
